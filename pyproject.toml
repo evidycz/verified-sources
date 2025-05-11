@@ -93,6 +93,9 @@ scrapy = [
     "scrapy>=2.11.0,<3",
     "twisted==22.10.0",
 ]
+seznam-sklik = [
+    "sklik>=1.0.2",
+]
 
 [tool.uv]
 default-groups = [

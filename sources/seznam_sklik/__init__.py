@@ -26,7 +26,7 @@ from .settings import (
 
 
 @dlt.source(name="seznam_sklik")
-def seznam_sklik_source(access_token: dlt.secrets.value) -> List[DltResource]:
+def seznam_sklik_source(access_token: str = dlt.secrets.value) -> List[DltResource]:
     sklik_api = SklikApi.init(access_token)
 
     @dlt.resource(name="accounts", table_name="accounts_setting", write_disposition="replace")
@@ -60,7 +60,7 @@ def seznam_sklik_source(access_token: dlt.secrets.value) -> List[DltResource]:
 
 @dlt.source(name="seznam_sklik")
 def seznam_sklik_incremental_source(
-        access_token: dlt.secrets.value,
+        access_token: str = dlt.secrets.value,
         account_id: Optional[int] = None,
         initial_load_past_days: int = 28,
         attribution_window_days_lag: int = 7,
@@ -105,7 +105,7 @@ def seznam_sklik_incremental_source(
 
 @dlt.source(name="seznam_sklik")
 def seznam_sklik_stats_source(
-        access_token: dlt.secrets.value,
+        access_token: str = dlt.secrets.value,
         account_id: Optional[int] = None,
         start_date: str = pendulum.yesterday().subtract(days=28).to_date_string(),
         end_date: str = pendulum.yesterday().to_date_string(),

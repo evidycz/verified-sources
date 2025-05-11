@@ -74,13 +74,13 @@ def seznam_sklik_incremental_source(
     initial_load_start_date = pendulum.today().subtract(days=initial_load_past_days)
     initial_load_start_date_str = initial_load_start_date.isoformat()
 
-    @dlt.resource(name="accounts", write_disposition="skip")
+    @dlt.resource(name=f"{level}_raw", write_disposition="skip")
     def accounts(access_type: str = "rw") -> Iterator[TDataItem]:
         yield get_filtered_accounts(sklik_api,None, access_type)
 
     @dlt.transformer(
         data_from=accounts,
-        name=f"{level}",
+        name=f"{level}_stats",
         table_name=f"{level}_stats",
         merge_key=STATS_PRIMARY_KEY,
         columns=OBJECT_STATS_COLUMNS,
@@ -116,13 +116,13 @@ def seznam_sklik_stats_source(
 ) -> DltResource:
     sklik_api = SklikApi.init(access_token)
 
-    @dlt.resource(name="accounts", write_disposition="skip")
+    @dlt.resource(name=f"{level}_raw", write_disposition="skip")
     def accounts(access_type: str = "rw") -> Iterator[TDataItem]:
         yield get_filtered_accounts(sklik_api, None, access_type)
 
     @dlt.transformer(
         data_from=accounts,
-        name=f"{level}",
+        name=f"{level}_stats",
         table_name=f"{level}_stats",
         write_disposition="replace",
     )

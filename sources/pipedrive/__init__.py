@@ -9,7 +9,7 @@ Api changelog: https://developers.pipedrive.com/changelog
 To get an api key: https://pipedrive.readme.io/docs/how-to-find-the-api-token
 """
 
-from typing import Any, Dict, Iterator, List, Optional, Union, Iterable, Iterator, Tuple
+from typing import Any, Dict, Iterator, List, Optional, Union, Iterator
 
 import dlt
 
@@ -34,7 +34,6 @@ def pipedrive_source(
     Args:
         pipedrive_api_key: https://pipedrive.readme.io/docs/how-to-find-the-api-token
         since_timestamp: Starting timestamp for incremental loading. By default complete history is loaded on first run.
-        incremental: Enable or disable incremental loading.
 
     Returns resources:
         custom_fields_mapping
@@ -53,6 +52,8 @@ def pipedrive_source(
         stages
         users
         leads
+        projects
+        tasks
 
     For custom fields rename the `custom_fields_mapping` resource must be selected or loaded before other resources.
 
@@ -173,7 +174,7 @@ def parsed_mapping(
 
 
 @dlt.resource(primary_key="id", write_disposition="merge")
-def leads(
+def  leads(
     pipedrive_api_key: str = dlt.secrets.value,
     update_time: dlt.sources.incremental[str] = dlt.sources.incremental(
         "update_time", "1970-01-01 00:00:00"
